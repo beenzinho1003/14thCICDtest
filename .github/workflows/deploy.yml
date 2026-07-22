@@ -32,7 +32,7 @@ jobs:
     - name: Build, tag, and push image to Amazon ECR
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: 14thdeploysession
+        ECR_REPOSITORY: 14thdeployhomework
         IMAGE_TAG: latest
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
@@ -47,17 +47,17 @@ jobs:
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           # AWS ECR 로그인
-          aws ecr get-login-password --region ap-northeast-2 | sudo docker login --username AWS --password-stdin [자신의 AWS 계정 번호].dkr.ecr.ap-northeast-2.amazonaws.com
+          aws ecr get-login-password --region ap-northeast-2 | sudo docker login --username AWS --password-stdin 231063060605.dkr.ecr.ap-northeast-2.amazonaws.com
           
           # 기존 8000포트 컨테이너 멈추고 지우기
           sudo docker stop my-app || true
           sudo docker rm my-app || true
           
           # ECR에서 최신 장고 이미지 다운로드
-          sudo docker pull [자신의 AWS 계정 번호].dkr.ecr.ap-northeast-2.amazonaws.com/14thdeploysession:latest
+          sudo docker pull 231063060605.dkr.ecr.ap-northeast-2.amazonaws.com/14thdeployhomework:latest
           
           # 도커 컨테이너 재가동!
-          sudo docker run -d -p 8000:8000 --name my-app [자신의 AWS 계정 번호].dkr.ecr.ap-northeast-2.amazonaws.com/14thdeploysession:latest
+          sudo docker run -d -p 8000:8000 --name my-app 231063060605.dkr.ecr.ap-northeast-2.amazonaws.com/14thdeployhomework:latest
           
           # 안 쓰는 쓰레기 이미지 정리 (용량 확보)
           sudo docker image prune -f
